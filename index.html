@@ -1,0 +1,251 @@
+Here’s the upgraded and polished surprise page you dreamed up, Krishna—clean, elegant, and now fully functional with synced visuals, sound, glowing buttons, and a lovely white background.
+
+Just copy this into an `.html` file and open it in a browser:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Surprise for You</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    button {
+      padding: 20px 40px;
+      font-size: 1.4rem;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      background: #ff69b4;
+      color: white;
+      text-shadow: 0 0 5px white, 0 0 10px white;
+      box-shadow: 0 4px 12px rgba(255, 105, 180, 0.4);
+      margin-top: 20px;
+      transition: transform 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    #fireworksCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: none;
+      z-index: 5;
+    }
+
+    #heartContainer {
+      display: none;
+      position: relative;
+      width: 600px;
+      height: 550px;
+      margin-top: 30px;
+    }
+
+    .heart-img {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      object-fit: cover;
+      box-shadow: 0 0 10px pink;
+    }
+
+    #loveMessage {
+      display: none;
+      font-size: 2.2rem;
+      margin-top: 30px;
+      color: #ff4da6;
+      font-family: 'Brush Script MT', cursive;
+      letter-spacing: 2px;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+
+  <button id="sorryBtn">Tap on Sorry</button>
+  <button id="readyBtn" style="display:none;">Are You Ready?</button>
+
+  <canvas id="fireworksCanvas"></canvas>
+
+  <div id="loveMessage"></div>
+  <div id="heartContainer"></div>
+
+  <audio id="crackleSound" src="https://freesound.org/data/previews/353/353009_4019027-lq.mp3"></audio>
+  <audio id="music" src="https://files.catbox.moe/pjmxo8.mp3"></audio>
+
+  <script>
+    const sorryBtn = document.getElementById("sorryBtn");
+    const readyBtn = document.getElementById("readyBtn");
+    const canvas = document.getElementById("fireworksCanvas");
+    const ctx = canvas.getContext("2d");
+    const heartContainer = document.getElementById("heartContainer");
+    const loveMessage = document.getElementById("loveMessage");
+    const crackleSound = document.getElementById("crackleSound");
+    const music = document.getElementById("music");
+
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+
+    sorryBtn.onclick = () => {
+      sorryBtn.style.display = "none";
+      readyBtn.style.display = "inline-block";
+    };
+
+    readyBtn.onclick = () => {
+      readyBtn.style.display = "none";
+      canvas.style.display = "block";
+      crackleSound.play();
+      startFireworks();
+
+      setTimeout(() => {
+        canvas.style.display = "none";
+        stopFireworks();
+        crackleSound.pause();
+        music.play();
+        showHeart();
+        showMessage("I Love You Sweetheart Forever");
+      }, 4500);
+    };
+
+    function showHeart() {
+      heartContainer.style.display = "block";
+      const links = [
+        "https://i.ibb.co/ZvsszqY/74022-DD7-8-A77-499-B-AD48-B434418-A07-DF.png",
+        "https://i.ibb.co/mr8Ts3b/IMG-3713.jpg",
+        "https://i.ibb.co/212dc58/IMG-3682.jpg",
+        "https://i.ibb.co/JFnRgvh/IMG-2265.jpg",
+        "https://i.ibb.co/6Rxyqms/IMG-2259.jpg",
+        "https://i.ibb.co/N286QdR/IMG-1840.jpg",
+        "https://i.ibb.co/6JqB9yN/IMG-1167.jpg",
+        "https://i.ibb.co/sp4DqPV/061a4f7e-769b-4a75-9093-cf1f3b7dfc33.jpg",
+        "https://i.ibb.co/fYdXsGm/3d7ad99c-f7b5-4f91-ab90-059b6d784041.jpg",
+        "https://i.ibb.co/WNkmFts/IMG-8588.jpg",
+        "https://i.ibb.co/PG42RPL/IMG-8587.jpg",
+        "https://i.ibb.co/Ng6mBp3/3-FAA830-C-C295-4319-BEAA-A0-FEB5-BF62-AC.jpg",
+        "https://i.ibb.co/JWgtvPL/939b3a43-cfeb-4486-a9b0-dc0daca955eb.jpg",
+        "https://i.ibb.co/qYyk5Cg/IMG-4088.jpg",
+        "https://i.ibb.co/Kpm8Lf4/IMG-4085.jpg",
+        "https://i.ibb.co/nNRG3vC/IMG-2256.jpg",
+        "https://i.ibb.co/chs0Bxf/IMG-2263.jpg",
+        "https://i.ibb.co/dYgJZqF/IMG-1109.jpg",
+        "https://i.ibb.co/xq4WJQv/3293e8ec-0ace-4f9b-a5b8-198f2957542e.jpg",
+        "https://i.ibb.co/BKjPRcd/95648506-2903-4483-8b76-ee72e99a6cf3.jpg"
+      ];
+      const coords = [
+        [260, 20],[200, 40],[320, 40],[160, 100],[360, 100],
+        [140,160],[380,160],[150,220],[370,220],[170,280],
+        [350,280],[200,320],[320,320],[230,360],[290,360],
+        [240,400],[280,400],[255,430],[265,430],[260,450]
+      ];
+      links.forEach((url, i) => {
+        const img = document.createElement("img");
+        img.src = url;
+        img.className = "heart-img";
+        const [x, y] = coords[i];
+        img.style.left = `${x}px`;
+        img.style.top = `${y}px`;
+        heartContainer.appendChild(img);
+        setTimeout(() => {
+          img.style.opacity = 1;
+        }, i * 200);
+      });
+    }
+
+    function showMessage(text) {
+      loveMessage.style.display = "block";
+      let i = 0;
+      loveMessage.innerHTML = "";
+      const interval = setInterval(() => {
+        loveMessage.innerHTML += text[i];
+        i++;
+        if (i >= text.length) clearInterval(interval);
+      }, 150);
+    }
+
+    // Firework particle animation
+    let fireworks = [];
+
+    function createFirework() {
+      const x = Math.random() * width;
+      const y = height;
+      const color = `hsl(${Math.random() * 360}, 100%, 60%)`;
+      let particles = [];
+      for (let i = 0; i < 30; i++) {
+        particles.push({
+          x,
+          y,
+          angle: Math.random() * Math.PI * 2,
+          speed: Math.random() * 4 + 2,
+          radius: Math.random() * 2 + 1,
+          alpha: 1,
+          decay: Math.random() * 0.02 + 0.01,
+          color
+        });
+      }
+      fireworks.push(particles);
+    }
+
+    function updateFireworks() {
+      ctx.clearRect(0, 0, width, height);
+      fireworks.forEach((particles, index) => {
+        particles.forEach(p => {
+          p.x += Math.cos(p.angle) * p.speed;
+          p.y += Math.sin(p.angle) * p.speed;
+          p.alpha -= p.decay;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = `${p.color.slice(0, -1)}, ${p.alpha})`;
+          ctx.fill();
+        });
+        fireworks[index] = particles.filter(p => p.alpha > 0);
+      });
+      fireworks = fireworks.filter(p => p
+// cleanup
+      fireworks.length > 0);
+    }
+
+    let fireworkInterval, animationFrame;
+
+    function startFireworks() {
+      fireworkInterval = setInterval(createFirework, 400);
+      function loop() {
+        updateFireworks();
+        animationFrame = requestAnimationFrame(loop);
+      }
+      loop();
+    }
+
+    function stopFireworks() {
+      clearInterval(fireworkInterval);
+      cancelAnimationFrame(animationFrame);
+      ctx.clearRect(0, 0, width, height);
+    }
+
+    window.addEventListener('resize', () => {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+    });
+  </script>
+</body>
+</html>
